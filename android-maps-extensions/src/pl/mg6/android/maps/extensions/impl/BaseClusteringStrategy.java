@@ -57,7 +57,7 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 			marker.setVisible(true);
 		} else {
 			IconData iconData = getIconData(markersCount);
-			marker = map.addMarker(markerOptions.position(position).icon(iconData.icon).anchor(iconData.horizAnchor, iconData.vertAnchor));
+			marker = map.addMarker(markerOptions.position(position).title(iconData.title).snippet(iconData.snippet).icon(iconData.icon).anchor(iconData.horizAnchor, iconData.vertAnchor));
 		}
 		return marker;
 	}
@@ -96,12 +96,18 @@ abstract class BaseClusteringStrategy implements ClusteringStrategy {
 
 		private BitmapDescriptor icon;
 
+		private String title;
+		
+		private String snippet;
+		
 		private float horizAnchor;
 
 		private float vertAnchor;
 
 		private IconData(MarkerOptions markerOptions) {
 			icon = markerOptions.getIcon();
+			title = markerOptions.getTitle();
+			snippet = markerOptions.getSnippet();
 			horizAnchor = markerOptions.getAnchorU();
 			vertAnchor = markerOptions.getAnchorV();
 		}

@@ -68,22 +68,35 @@ class ClusterMarker implements Marker {
 			cacheVirtual();
 			markers.get(0).changeVisible(true);
 		} else {
+            int clusterableCount = clusterableCount();
 			LatLngBounds.Builder builder = LatLngBounds.builder();
 			for (DelegatingMarker m : markers) {
-				builder.include(m.getPosition());
-				m.changeVisible(false);
+			    if (m.canBeClustered()) {
+    				builder.include(m.getPosition());
+			    }
+				m.changeVisible(!m.canBeClustered()||clusterableCount<=1);
 			}
-			LatLng position = calculateCenter(builder.build());
-			if (virtual == null || lastCount != count) {
-				cacheVirtual();
-				lastCount = count;
-				virtual = strategy.getFromCacheOrCreate(count, position);
-			} else {
-				virtual.setPosition(position);
+			if (clusterableCount > 1) {
+    			LatLng position = calculateCenter(builder.build());
+    			if (virtual == null || lastCount != clusterableCount) {
+    				cacheVirtual();
+    				lastCount = clusterableCount;
+    				virtual = strategy.getFromCacheOrCreate(clusterableCount, position);
+    			} else {
+    				virtual.setPosition(position);
+    			}
 			}
 		}
 	}
-
+	
+	private int clusterableCount() {
+	    int count = 0;
+	    for (Marker m : markers) {
+	        count += m.canBeClustered()?1:0;
+	    }
+	    return count;
+	}
+	
 	Marker getDisplayedMarker() {
 		int count = markers.size();
 		if (count == 0) {
@@ -188,6 +201,11 @@ class ClusterMarker implements Marker {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean canBeClustered() {
+	    return false;
+	}
 
 	@Override
 	public boolean isVisible() {
@@ -237,6 +255,10 @@ class ClusterMarker implements Marker {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	public void setCanBeClustered(boolean canBeClustered) {
+	}
+	
 	@Override
 	public void setVisible(boolean visible) {
 		throw new UnsupportedOperationException();

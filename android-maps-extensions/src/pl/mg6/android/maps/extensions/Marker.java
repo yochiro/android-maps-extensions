@@ -55,6 +55,8 @@ public interface Marker {
 
 	boolean isInfoWindowShown();
 
+	boolean canBeClustered();
+	
 	boolean isVisible();
 
 	void remove();
@@ -76,6 +78,8 @@ public interface Marker {
 
 	void setTitle(String title);
 
+	void setCanBeClustered(boolean canBeClustered);
+	
 	void setVisible(boolean visible);
 
 	void showInfoWindow();

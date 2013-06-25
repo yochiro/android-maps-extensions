@@ -100,15 +100,20 @@ public class DelegatingGoogleMap implements GoogleMap, OnMarkerCreateListener {
 
 	@Override
 	public Marker addMarker(MarkerOptions markerOptions) {
-		boolean visible = markerOptions.isVisible();
-		markerOptions.visible(false);
-		LazyMarker realMarker = new LazyMarker(real.getMap(), markerOptions, this);
-		markerOptions.visible(visible);
-		DelegatingMarker marker = new DelegatingMarker(realMarker, this);
-		markers.put(realMarker, marker);
-		clusteringStrategy.onAdd(marker);
-		marker.setVisible(visible);
-		return marker;
+	    return addMarker(markerOptions, true);
+	}
+
+	public Marker addMarker(MarkerOptions markerOptions, boolean canBeClustered) {
+        boolean visible = markerOptions.isVisible();
+        markerOptions.visible(false);
+        LazyMarker realMarker = new LazyMarker(real.getMap(), markerOptions, this);
+        markerOptions.visible(visible);
+        DelegatingMarker marker = new DelegatingMarker(realMarker, this);
+        marker.setCanBeClustered(canBeClustered);
+        markers.put(realMarker, marker);
+        clusteringStrategy.onAdd(marker);
+        marker.setVisible(visible);
+	    return marker;
 	}
 
 	@Override

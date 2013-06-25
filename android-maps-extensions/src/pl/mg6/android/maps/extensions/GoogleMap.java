@@ -47,7 +47,9 @@ public interface GoogleMap {
 
 	Marker addMarker(MarkerOptions markerOptions);
 
-	Polygon addPolygon(PolygonOptions polygonOptions);
+    Marker addMarker(MarkerOptions markerOptions, boolean canBeClustered);
+
+    Polygon addPolygon(PolygonOptions polygonOptions);
 
 	Polyline addPolyline(PolylineOptions polylineOptions);
 

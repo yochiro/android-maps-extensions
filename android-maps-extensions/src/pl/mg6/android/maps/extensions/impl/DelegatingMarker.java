@@ -30,6 +30,8 @@ class DelegatingMarker implements Marker {
 
 	private Object data;
 
+	private boolean canBeClustered = true;
+
 	private boolean visible;
 
 	DelegatingMarker(LazyMarker real, DelegatingGoogleMap map) {
@@ -91,6 +93,11 @@ class DelegatingMarker implements Marker {
 	}
 
 	@Override
+    public boolean canBeClustered() {
+	    return canBeClustered;
+	}
+	
+	@Override
 	public boolean isVisible() {
 		return visible;
 	}
@@ -137,6 +144,14 @@ class DelegatingMarker implements Marker {
 		real.setTitle(title);
 	}
 
+	@Override
+	public void setCanBeClustered(boolean canBeClustered) {
+	    if (this.canBeClustered != canBeClustered) {
+	        this.canBeClustered = canBeClustered;
+	        map.onPositionChange(this);
+	    }
+	}
+	
 	@Override
 	public void setVisible(boolean visible) {
 		if (this.visible != visible) {
